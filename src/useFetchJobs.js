@@ -41,16 +41,23 @@ const reducer = (state, action) => {
 
 const getData = async (dispatch, params, page) => {
   console.log('getData called');
+  // handle throttling
+  const cancelToken = axios.CancelToken.source();
   try {
     dispatch({ type: MAKE_REQUEST });
     const res = await axios.get(BASE_URL, {
+      cancelToken: cancelToken.token,
       params: { ...params, page, markdown: true },
     });
     dispatch({ type: GET_DATA, payload: { jobs: res.data } });
     console.log('got data', res);
   } catch (err) {
+    if (axios.isCancel(err)) return;
     dispatch({ type: ERROR, payload: { error: err } });
   }
+  return () => {
+    cancelToken.cancel();
+  };
 };
 
 const useFetchJobs = (params, page) => {
