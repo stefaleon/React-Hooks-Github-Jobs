@@ -10,7 +10,7 @@ const actions = {
 const { MAKE_REQUEST, GET_DATA, ERROR } = actions;
 
 const BASE_URL =
-  'https://cors-anywhere.herokuapp.com/https://jobs.github.com/positions';
+  'https://cors-anywhere.herokuapp.com/https://jobs.github.com/positions.json';
 
 const initialState = { jobs: [], loading: false };
 
