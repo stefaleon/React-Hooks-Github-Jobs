@@ -9,7 +9,8 @@ const actions = {
 
 const { MAKE_REQUEST, GET_DATA, ERROR } = actions;
 
-const BASE_URL = 'https://jobs.github.com/positions';
+const BASE_URL =
+  'https://cors-anywhere.herokuapp.com/https://jobs.github.com/positions';
 
 const initialState = { jobs: [], loading: false };
 
@@ -40,9 +41,16 @@ const reducer = (state, action) => {
 
 const getData = async (dispatch, params, page) => {
   console.log('getData called');
-  dispatch({ type: MAKE_REQUEST });
-  await axios.get(BASE_URL, { params: { ...params, page, markdown: true } });
-  console.log('got data');
+  try {
+    dispatch({ type: MAKE_REQUEST });
+    const res = await axios.get(BASE_URL, {
+      params: { ...params, page, markdown: true },
+    });
+    dispatch({ type: GET_DATA, payload: { jobs: res.data } });
+    console.log('got data', res);
+  } catch (err) {
+    dispatch({ type: ERROR, payload: { error: err } });
+  }
 };
 
 const useFetchJobs = (params, page) => {
