@@ -35,7 +35,10 @@ const reducer = (state, action) => {
         loading: false,
       };
     case UPDATE_HAS_NEXT_PAGE:
-      return { ...state, hasNextPage: action.payload.hasNextPage };
+      return {
+        ...state,
+        hasNextPage: action.payload.hasNextPage,
+      };
     default:
       return state;
   }
